@@ -2,7 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os, errno
 
-class loaded_text:
+# Script was written to plot information recorded by HWINFO64 if benchmarking computer
+
+class loaded_text: # Generalized class to load txt files and store relevant data
 
 	def __init__(self,filename):
 		self.filename = filename
@@ -20,7 +22,7 @@ class loaded_text:
 		# 	for j in range(len(self.array)):
 		# 		self.array[j].append(lines[i].split(",")[j])
 
-		for i in range(len(lines)):
+		for i in range(len(lines)): # Handle reading dates and times
 			lines[i] = lines[i].split(",")
 			date_converter = lines[i][1].split(":")
 			year_converter = lines[i][0].split(".")
@@ -55,14 +57,14 @@ class loaded_text:
 		# 	for i in range(len(self.headers)):
 		# 		self.array[i].append(line.split(",")[i])
 
-	def search(self,tag):
+	def search(self,tag): # Find particular header and associated column. I forgot if numpy handles this natively or not
 		tags = []
 		for i in range(len(self.headers)):
 			if tag in self.headers[i]:
 				tags.append([self.headers[i],i])
 		return tags
 
-	def plot_xy(self,tag,x_column=-1,y_column=2,x_label="x",y_label="y"): # Plots voltage vs. voltage and makes a png file based on filename
+	def plot_xy(self,tag,x_column=-1,y_column=2,x_label="x",y_label="y"): # Plots any x vs. y and makes a png file based on filename
 		tag_list = self.search(tag)
 		if len(tag_list) != 1:
 			print("Found 0 or 2+ results, please pick one:")
@@ -92,7 +94,7 @@ class loaded_text:
 		plt.savefig(self.filename+'_xy.png')
 		plt.close()
 
-	def plot_xyy(self,x_column=0,y1_column=1,y2_column=2,x_label="x",y1_label="y1",y2_label="y2"): # Plots time vs. voltage (and vs. voltage 2) and makes a png file based on filename
+	def plot_xyy(self,x_column=0,y1_column=1,y2_column=2,x_label="x",y1_label="y1",y2_label="y2"): # Plots multiple y variables against x and makes a png file based on filename
 		y1_data = self.array[:,y1_column]
 		y2_data = self.array[:,y2_column]
 		x_data = self.array[:,x_column]
@@ -151,7 +153,7 @@ class loaded_text:
 		plt.savefig(self.filename.split('.csv')[0]+'_mobo.png')
 		plt.close()
 
-	def plot_cpu_clock(self): # Plots voltage vs. voltage and makes a png file based on filename
+	def plot_cpu_clock(self): # Plotting CPU clock speed
 
 		mobo_temperatures = [["System1 [°C]","Chipset [°C]", "VRM MOS [°C]", "VSOC MOS [°C]"], [79,80,83,84]]
 		cpu_freq = [["Core 0 T0 Effective Clock [MHz]","Core 0 T1 Effective Clock [MHz]", "Core 1 T0 Effective Clock [MHz]", \
